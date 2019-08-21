@@ -1,0 +1,12 @@
+rule "$RULENAME$"
+
+when
+$TOOLNAME$:$RTV$(Integer.parseInt($METRICNAME$) $OPERATOR$ $THRESHOLD$)
+p:Team()
+then
+Achievements achievement=new Achievements();
+p.setPoints(p.getPoints()+$REWARD$);
+achievment.setMetric("$METRICNAME$");
+achievment.setReward($REWARD$);
+p.setAchievements(achievement);
+end;

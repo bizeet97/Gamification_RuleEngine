@@ -1,0 +1,54 @@
+package KieRule;
+import com.wipro.rtvs.Scm;
+import com.wipro.rtvs.Rtvs;
+import com.wipro.rule.ServiceMongo;
+import java.util.List;
+import com.wipro.rule.Team;
+import com.wipro.rule.Achievements;
+import com.wipro.rtvs.Sonar;
+
+
+
+
+rule "Sonar"
+
+when
+sonar:Sonar(Integer.parseInt(criticalViolations)<15)
+t:Team()
+then
+Achievements achievement=new Achievements();
+t.setPoints(t.getPoints()+4);
+achievement.setReward(4);
+achievement.setMetric("Critical violations for code base");
+t.setAchievements(achievement);
+end;
+
+
+
+rule "Sonar_blocker"
+
+when
+sonar:Sonar(Integer.parseInt(blockerViolations)<12)
+p:Team()
+then
+Achievements achievement=new Achievements();
+p.setPoints(p.getPoints()+2);
+achievement.setMetric("Blocker Violations");
+achievement.setReward(2);
+p.setAchievements(achievement);
+end;
+
+
+
+rule "SCM"
+
+when
+scm:Scm(commitCount>2)
+p:Team()
+then
+Achievements achievement=new Achievements();
+p.setPoints(p.getPoints()+10);
+achievement.setMetric("No. of commits per day");
+achievement.setReward(10);
+p.setAchievements(achievement);
+end;
